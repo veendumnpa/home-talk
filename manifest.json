@@ -1,0 +1,19 @@
+{
+  "name": "Home Talk — Family Finance",
+  "short_name": "Home Talk",
+  "description": "Family finance manager with cloud sync",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f7f5",
+  "theme_color": "#167a58",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/609/609803.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
