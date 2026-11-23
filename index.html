@@ -5,20 +5,75 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f7f5">
 <title>Home Talk — Family Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Malayalam:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{--bg:#f4f7f5;--surface:#fff;--surface2:#edf2ef;--text:#17231e;--muted:#718078;--line:#e2e9e4;--green:#167a58;--green2:#e1f3e9;--red:#c64e4e;--amber:#a66a12;--shadow:0 8px 28px rgba(24,54,39,.07)}
 [data-theme="dark"]{--bg:#101815;--surface:#19231e;--surface2:#223029;--text:#eef6f0;--muted:#a0b1a6;--line:#2b3a31;--green:#76d5a7;--green2:#203d30;--red:#ff8585;--amber:#efc16d;--shadow:0 8px 28px rgba(0,0,0,.2)}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.45 system-ui,-apple-system,"Noto Sans Malayalam",sans-serif}
-button,input,select{font:inherit}button{cursor:pointer}.app{max-width:520px;margin:auto;min-height:100dvh;padding:env(safe-area-inset-top) 16px calc(88px + env(safe-area-inset-bottom))}
-header{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px}.brand{display:flex;align-items:center;gap:10px}.logo{width:42px;height:42px;border-radius:14px;background:var(--green2);display:grid;place-items:center;font-size:22px}.brand h1{font-size:18px;margin:0}.brand p{font-size:11px;color:var(--muted);margin:1px 0 0}.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:12px;padding:10px}
-h2{font-size:19px;margin:20px 0 10px}.muted{color:var(--muted)}.small{font-size:12px}.hero{background:linear-gradient(135deg,#164f3b,#1b8060);color:white;padding:20px;border-radius:22px;box-shadow:var(--shadow)}.hero .label{color:#d1e9dc;font-size:12px}.hero .amount{font-size:34px;font-weight:750;letter-spacing:-1px;margin:4px 0 14px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:rgba(255,255,255,.13);border-radius:14px;padding:11px}.stat span{display:block;font-size:11px;color:#d1e9dc}.stat strong{font-size:17px}
-.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}.quick button{border:0;border-radius:15px;padding:14px;background:var(--surface);color:var(--text);box-shadow:var(--shadow);font-weight:650;text-align:left}.quick b{display:block;font-size:23px;color:var(--green);margin-bottom:4px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:14px;margin:10px 0;box-shadow:var(--shadow)}.row{display:flex;align-items:center;justify-content:space-between;gap:10px}.row+.row{margin-top:10px}.pill{font-size:11px;padding:4px 9px;border-radius:99px;background:var(--green2);color:var(--green);white-space:nowrap}.pill.pending{background:#fff1d9;color:#99620c}.pill.overdue{background:#ffe4e4;color:#ad3838}[data-theme="dark"] .pill.pending{background:#45351c;color:#f0c16b}[data-theme="dark"] .pill.overdue{background:#482626;color:#ff9999}
-.tabs{position:fixed;z-index:5;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding:9px 8px calc(9px + env(safe-area-inset-bottom));backdrop-filter:blur(16px)}.tabs button{border:0;background:transparent;color:var(--muted);font-size:10px;padding:5px 0}.tabs button span{display:block;font-size:20px;margin-bottom:2px}.tabs button.active{color:var(--green);font-weight:750}
-.page{display:none}.page.active{display:block}.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:20px 0 8px}.sectionhead h2{margin:0}.primary,.secondary,.danger{border:0;border-radius:12px;padding:11px 14px;font-weight:700}.primary{background:var(--green);color:white}.secondary{background:var(--surface2);color:var(--text)}.danger{background:#ffebeb;color:#a93636}
-.itemicon{width:38px;height:38px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;font-size:19px;flex-shrink:0}.itemmain{display:flex;align-items:center;gap:10px;min-width:0}.itemmain strong{display:block}.itemmain small{color:var(--muted)}.money{font-weight:750;white-space:nowrap}.positive{color:var(--green)}.negative{color:var(--red)}
-input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);outline:none}label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modalback{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:10;padding:12px}.modalback.show{display:flex}.modal{width:min(520px,100%);background:var(--surface);border-radius:22px;padding:18px;max-height:88dvh;overflow:auto}.modal h3{margin:0 0 8px}.actions{display:flex;gap:8px;margin-top:16px}.actions>*{flex:1}.progress{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:var(--green);border-radius:99px}.empty{text-align:center;color:var(--muted);padding:24px 8px}.settingsrow{padding:13px 0;border-bottom:1px solid var(--line)}.settingsrow:last-child{border:0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 "Noto Sans Malayalam",system-ui,-apple-system,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.app{max-width:520px;margin:auto;min-height:100dvh;padding:env(safe-area-inset-top) 16px calc(88px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:42px;height:42px;border-radius:14px;background:var(--green2);display:grid;place-items:center;font-size:22px}
+.brand h1{font-size:18px;margin:0}
+.brand p{font-size:11px;color:var(--muted);margin:1px 0 0}
+.iconbtn{border:1px solid var(--line);background:var(--surface);color:var(--text);border-radius:12px;padding:10px}
+h2{font-size:19px;margin:20px 0 10px}
+.muted{color:var(--muted)}.small{font-size:12px}
+.hero{background:linear-gradient(135deg,#164f3b,#1b8060);color:white;padding:20px;border-radius:22px;box-shadow:var(--shadow)}
+.hero .label{color:#d1e9dc;font-size:12px}
+.hero .amount{font-size:34px;font-weight:750;letter-spacing:-1px;margin:4px 0 14px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:rgba(255,255,255,.13);border-radius:14px;padding:11px}
+.stat span{display:block;font-size:11px;color:#d1e9dc}
+.stat strong{font-size:17px}
+.quick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.quick button{border:0;border-radius:15px;padding:14px;background:var(--surface);color:var(--text);box-shadow:var(--shadow);font-weight:650;text-align:left}
+.quick b{display:block;font-size:23px;color:var(--green);margin-bottom:4px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:14px;margin:10px 0;box-shadow:var(--shadow)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.row+.row{margin-top:10px}
+.pill{font-size:11px;padding:4px 9px;border-radius:99px;background:var(--green2);color:var(--green);white-space:nowrap}
+.pill.pending{background:#fff1d9;color:#99620c}
+.pill.overdue{background:#ffe4e4;color:#ad3838}
+[data-theme="dark"] .pill.pending{background:#45351c;color:#f0c16b}
+[data-theme="dark"] .pill.overdue{background:#482626;color:#ff9999}
+.tabs{position:fixed;z-index:5;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);display:grid;grid-template-columns:repeat(5,1fr);background:var(--surface);border-top:1px solid var(--line);padding:9px 8px calc(9px + env(safe-area-inset-bottom));backdrop-filter:blur(16px)}
+.tabs button{border:0;background:transparent;color:var(--muted);font-size:10px;padding:5px 0}
+.tabs button span{display:block;font-size:20px;margin-bottom:2px}
+.tabs button.active{color:var(--green);font-weight:750}
+.page{display:none}.page.active{display:block}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;margin:20px 0 8px}
+.sectionhead h2{margin:0}
+.primary,.secondary,.danger{border:0;border-radius:12px;padding:11px 14px;font-weight:700}
+.primary{background:var(--green);color:white}
+.secondary{background:var(--surface2);color:var(--text)}
+.danger{background:#ffebeb;color:#a93636}
+.itemicon{width:38px;height:38px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;font-size:19px;flex-shrink:0}
+.itemmain{display:flex;align-items:center;gap:10px;min-width:0}
+.itemmain strong{display:block}
+.itemmain small{color:var(--muted)}
+.money{font-weight:750;white-space:nowrap}
+.positive{color:var(--green)}.negative{color:var(--red)}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);outline:none}
+label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.modalback{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:10;padding:12px}
+.modalback.show{display:flex}
+.modal{width:min(520px,100%);background:var(--surface);border-radius:22px;padding:18px;max-height:88dvh;overflow:auto}
+.modal h3{margin:0 0 8px}
+.actions{display:flex;gap:8px;margin-top:16px}
+.actions>*{flex:1}
+.progress{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:10px 0}
+.progress i{display:block;height:100%;background:var(--green);border-radius:99px}
+.empty{text-align:center;color:var(--muted);padding:24px 8px}
+.settingsrow{padding:13px 0;border-bottom:1px solid var(--line)}
+.settingsrow:last-child{border:0}
 .notice{padding:11px 12px;background:var(--surface2);border-radius:12px;color:var(--muted);font-size:12px;margin:12px 0}
 .syncbadge{font-size:11px;padding:4px 8px;border-radius:99px;background:var(--surface2);color:var(--muted);max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(min-width:520px){body{padding:16px 0}.app{border:1px solid var(--line);border-radius:24px;min-height:calc(100dvh - 32px);overflow:hidden}.tabs{bottom:16px;border-radius:0 0 24px 24px}}
@@ -26,7 +81,7 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><div class="logo">🏡</div><div><h1 id="appname">Home Talk</h1><p id="subtitle">Family Finance Manager</p></div></div><div style="display:flex;align-items:center;gap:8px"><span class="syncbadge" id="syncStatus" onclick="showSyncDetail()">Syncing...</span><button class="iconbtn" onclick="openSettings()" aria-label="Settings">⚙️</button></div></header>
+<header><div class="brand"><div class="logo">🏡</div><div><h1 id="appname">Home Talk</h1><p id="subtitle">Family Finance Manager</p></div></div><div style="display:flex;align-items:center;gap:8px"><span class="syncbadge" id="syncStatus" onclick="showSyncDetail()">Ready</span><button class="iconbtn" onclick="openSettings()" aria-label="Settings">⚙️</button></div></header>
 
 <main>
 <section class="page active" id="home">
@@ -71,10 +126,18 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 <script>
 const SUPABASE_URL = 'https://mrzelisawndfwpefrnls.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_QiopdhL2HJMNEPc0vuXBpA_M20I3Z0m';
-const sbLib = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
-const sb = (sbLib && typeof sbLib.createClient === 'function')
-  ? sbLib.createClient(SUPABASE_URL, SUPABASE_KEY)
-  : null;
+
+let sb = null;
+try {
+  const sbLib = window.supabase || (typeof supabase !== 'undefined' ? supabase : null);
+  if (sbLib && typeof sbLib.createClient === 'function') {
+    sb = sbLib.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false }
+    });
+  }
+} catch (e) {
+  sb = null;
+}
 
 const $=id=>document.getElementById(id), money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
 const monthKey=()=>new Date().toISOString().slice(0,7);
@@ -96,82 +159,139 @@ const sample={
  {id:2,name:'ലോൺ 2',principal:120000,paid:30000,emi:3000,day:18,rate:'',balance:90000}
  ]
 };
-const emptyData={tx:[],bills:[],loans:[]};
-let data=JSON.parse(localStorage.getItem('ht_data')||'null')||JSON.parse(JSON.stringify(sample));
+
+let data={tx:[],bills:[],loans:[]};
+try {
+  const saved = localStorage.getItem('ht_data');
+  data = saved ? JSON.parse(saved) : {tx:[],bills:[],loans:[]};
+} catch (e) {
+  data = {tx:[],bills:[],loans:[]};
+}
+if (!data || typeof data !== 'object') data = {tx:[],bills:[],loans:[]};
+data.tx = Array.isArray(data.tx) ? data.tx : [];
+data.bills = Array.isArray(data.bills) ? data.bills : [];
+data.loans = Array.isArray(data.loans) ? data.loans : [];
+
 let lang=localStorage.getItem('ht_lang')||'ml',theme=localStorage.getItem('ht_theme')||'light';
 let lastSyncError='';
 
 function setSyncStatus(msg){if($('syncStatus'))$('syncStatus').textContent=msg}
-function showSyncDetail(){if(lastSyncError)alert('Sync details: '+lastSyncError)}
+function showSyncDetail(){alert(lastSyncError ? ('Sync details: '+lastSyncError) : 'Status: '+($('syncStatus')?.textContent||'OK'))}
+
+function withTimeout(promise, ms=6000){
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error('Request timed out')), ms))
+  ]);
+}
 
 async function pushCloud(manual=false){
  if(!sb){
-  lastSyncError='Supabase library not loaded';
-  setSyncStatus('No SDK');
+  lastSyncError='Supabase client unavailable';
+  setSyncStatus('Local only');
   if(manual)alert(lastSyncError);
   return;
  }
  setSyncStatus('Saving...');
- const {error}=await sb
-  .from('home_talk_state')
-  .upsert({id:'main_family',payload:data,updated_at:new Date().toISOString()},{onConflict:'id'});
- if(error){
-  lastSyncError=error.message||'Unknown error';
-  setSyncStatus('Sync error');
-  if(manual)alert('Push error: '+lastSyncError);
- }else{
-  lastSyncError='';
-  setSyncStatus('Synced ✓');
-  if(manual)alert('Cloud data updated!');
+ try {
+  const {error} = await withTimeout(
+    sb.from('home_talk_state').upsert(
+      {id:'main_family',payload:data,updated_at:new Date().toISOString()},
+      {onConflict:'id'}
+    ),
+    6000
+  );
+  if(error){
+   lastSyncError=error.message||'Push error';
+   setSyncStatus('Sync error');
+   if(manual)alert('Push error: '+lastSyncError);
+  }else{
+   lastSyncError='';
+   setSyncStatus('Synced ✓');
+   if(manual)alert('Cloud data updated!');
+  }
+ } catch (e) {
+  lastSyncError=e.message||'Network timeout';
+  setSyncStatus('Offline / Timeout');
+  if(manual)alert('Sync issue: '+lastSyncError);
  }
 }
 
 async function pullCloud(manual=false){
  if(!sb){
-  lastSyncError='Supabase library not loaded';
-  setSyncStatus('No SDK');
+  lastSyncError='Supabase client unavailable';
+  setSyncStatus('Local only');
   if(manual)alert(lastSyncError);
   return;
  }
  setSyncStatus('Syncing...');
- const {data:row,error}=await sb
-  .from('home_talk_state')
-  .select('payload')
-  .eq('id','main_family')
-  .maybeSingle();
- if(error){
-  lastSyncError=error.message||'Unknown error';
-  setSyncStatus('Sync error');
-  if(manual)alert('Pull error: '+lastSyncError);
-  return;
+ try {
+  const {data:row,error} = await withTimeout(
+    sb.from('home_talk_state').select('payload').eq('id','main_family').maybeSingle(),
+    6000
+  );
+  if(error){
+   lastSyncError=error.message||'Pull error';
+   setSyncStatus('Sync error');
+   if(manual)alert('Pull error: '+lastSyncError);
+   return;
+  }
+  if(!row || !row.payload){
+   await pushCloud(false);
+   return;
+  }
+  const p=row.payload;
+  const cloudTx=Array.isArray(p.tx)?p.tx:[];
+  const cloudBills=Array.isArray(p.bills)?p.bills:[];
+  const cloudLoans=Array.isArray(p.loans)?p.loans:[];
+  const localHasData=(data.tx.length>0||data.bills.length>0||data.loans.length>0);
+  const cloudIsEmpty=(cloudTx.length===0&&cloudBills.length===0&&cloudLoans.length===0);
+
+  if(cloudIsEmpty && localHasData && !manual){
+   await pushCloud(false);
+  }else{
+   data={tx:cloudTx,bills:cloudBills,loans:cloudLoans};
+   localStorage.setItem('ht_data',JSON.stringify(data));
+   render();
+  }
+  lastSyncError='';
+  setSyncStatus('Synced ✓');
+  if(manual)alert('Cloud data refreshed!');
+ } catch (e) {
+  lastSyncError=e.message||'Network timeout';
+  setSyncStatus('Offline / Timeout');
+  if(manual)alert('Sync issue: '+lastSyncError);
  }
- if(!row || !row.payload){
-  await pushCloud(false);
-  return;
- }
- const p=row.payload;
- data={tx:Array.isArray(p.tx)?p.tx:[],bills:Array.isArray(p.bills)?p.bills:[],loans:Array.isArray(p.loans)?p.loans:[]};
- localStorage.setItem('ht_data',JSON.stringify(data));
- render();
- lastSyncError='';
- setSyncStatus('Synced ✓');
- if(manual)alert('Cloud data refreshed!');
 }
 
-function save(){localStorage.setItem('ht_data',JSON.stringify(data));render();pushCloud(false)}
+function save(){
+  try { localStorage.setItem('ht_data',JSON.stringify(data)); } catch (e) {}
+  render();
+  pushCloud(false);
+}
 function fmtDate(d){return new Date(d+'T00:00:00').toLocaleDateString(lang==='ml'?'ml-IN':'en-IN',{day:'numeric',month:'short'})}
-function monthTx(){return data.tx.filter(t=>t.date.startsWith(monthKey()))}
+function monthTx(){return data.tx.filter(t=>String(t.date||'').startsWith(monthKey()))}
 function totals(){let t=monthTx(),inc=t.filter(x=>x.type==='income').reduce((a,x)=>a+ +x.amount,0),exp=t.filter(x=>x.type==='expense').reduce((a,x)=>a+ +x.amount,0);return{inc,exp,net:inc-exp}}
-function render(){let t=totals();$('net').textContent=money(t.net);$('income').textContent=money(t.inc);$('expenses').textContent=money(t.exp);
-$('homebills').innerHTML=data.bills.slice(0,3).map(billHTML).join('')\vert{}\vert{}empty();$('homeloans').innerHTML=data.loans.map(l=>`<div class="card"><div class="row"><div class="itemmain"><div class="itemicon">🏦</div><div><strong>${esc(l.name)}</strong><small>EMI ${money(l.emi)} · ${l.day}ാം തീയതി</small></div></div><strong class="money">${money(l.balance)}</strong></div></div>`).join('')||empty();
-$('recent').innerHTML=[...data.tx].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,4).map(txHTML).join('')\vert{}\vert{}empty();renderTransactions();$('loanlist').innerHTML=data.loans.map(loanHTML).join('')||empty();$('billlist').innerHTML=data.bills.map(billHTML).join('')\vert{}\vert{}empty();$('settingsBillList').innerHTML=data.bills.map(settingsBillHTML).join('')||empty()}
+function render(){
+  let t=totals();
+  $('net').textContent=money(t.net);
+  $('income').textContent=money(t.inc);
+  $('expenses').textContent=money(t.exp);
+  $('homebills').innerHTML=data.bills.slice(0,3).map(billHTML).join('')||empty();
+  $('homeloans').innerHTML=data.loans.map(l=>`<div class="card"><div class="row"><div class="itemmain"><div class="itemicon">🏦</div><div><strong>${esc(l.name)}</strong><small>EMI ${money(l.emi)} · ${l.day}ാം തീയതി</small></div></div><strong class="money">${money(l.balance)}</strong></div></div>`).join('')||empty();
+  $('recent').innerHTML=[...data.tx].sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).slice(0,4).map(txHTML).join('')||empty();
+  renderTransactions();
+  $('loanlist').innerHTML=data.loans.map(loanHTML).join('')||empty();
+  $('billlist').innerHTML=data.bills.map(billHTML).join('')||empty();
+  $('settingsBillList').innerHTML=data.bills.map(settingsBillHTML).join('')||empty();
+}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function empty(){return '<div class="empty">ഇവിടെ ഇപ്പോൾ വിവരങ്ങളില്ല</div>'}
 function txHTML(x){return `<div class="card"><div class="row"><div class="itemmain"><div class="itemicon">${x.type==='income'?'↗':'🧾'}</div><div><strong>${esc(x.title)}</strong><small>${esc(x.person||'')} · ${fmtDate(x.date)} · ${esc(x.category||'')}</small></div></div><div style="text-align:right"><div class="money ${x.type==='income'?'positive':'negative'}">${x.type==='income'?'+':'−'}${money(x.amount)}</div><button class="secondary small" onclick="editTx(${x.id})">Edit</button></div></div></div>`}
 function billHTML(b){return `<div class="card"><div class="row"><div class="itemmain"><div class="itemicon">🧾</div><div><strong>${esc(b.name)}</strong><small>${b.fixed?'Fixed':'Flexible'} · ${b.frequency==='monthly'?'Monthly':b.frequency==='weekly'?'Weekly':'As needed'}${b.day?' · '+b.day+'ാം തീയതി':''}</small></div></div><div style="text-align:right"><div class="money">${money(b.amount)}</div><span class="pill ${b.paid?'':'pending'}">${b.paid?'Paid':'Pending'}</span></div></div><div class="row"><span class="small muted">${b.fixed?'Fixed amount':'Enter amount when paying'}</span><button class="primary small" onclick="payBill(${b.id})">${b.paid?'Mark unpaid':'Mark paid / Add expense'}</button></div></div>`}
 function settingsBillHTML(b){return `<div class="row" style="padding:10px 0;border-top:1px solid var(--line)"><div style="min-width:0"><strong>${esc(b.name)}</strong><div class="small muted">${money(b.amount)} · ${b.fixed?'Fixed':'Flexible'} · ${b.frequency}</div></div><div class="row" style="gap:6px"><button class="secondary small" onclick="editBill(${b.id})">Edit</button><button class="danger small" onclick="deleteBill(${b.id})">Delete</button></div></div>`}
-function loanHTML(l){let pct=Math.min(100,Math.round((l.paid/l.principal)*100));return `<div class="card"><div class="row"><strong>🏦 ${esc(l.name)}</strong><span class="pill">EMI ${money(l.emi)}</span></div><div class="progress"><i style="width:${pct}%"></i></div><div class="row small muted"><span>Paid ${money(l.paid)} (${pct}%)</span><span>Total ${money(l.principal)}</span></div><div class="row"><strong>ബാക്കി ${money(l.balance)}</strong><button class="primary small" onclick="payLoan(${l.id})">EMI അടച്ചു</button></div><div class="row"><button class="secondary small" onclick="editLoan(${l.id})">Edit details</button><span class="small muted">Due: ${l.day}th</span></div></div>`}
-function renderTransactions(){if(!$('txlist'))return;let f=$('filterType').value,q=$('searchTx').value.toLowerCase();let arr=[...data.tx].filter(x=>(f==='all'\vert{}\vert{}x.type===f)&&(x.title+' '+x.person+' '+x.category).toLowerCase().includes(q)).sort((a,b)=>b.date.localeCompare(a.date));$('txlist').innerHTML=arr.map(txHTML).join('')||empty()}
+function loanHTML(l){let pct=Math.min(100,Math.round((l.paid/l.principal)*100)||0);return `<div class="card"><div class="row"><strong>🏦 ${esc(l.name)}</strong><span class="pill">EMI ${money(l.emi)}</span></div><div class="progress"><i style="width:${pct}%"></i></div><div class="row small muted"><span>Paid ${money(l.paid)} (${pct}%)</span><span>Total ${money(l.principal)}</span></div><div class="row"><strong>ബാക്കി ${money(l.balance)}</strong><button class="primary small" onclick="payLoan(${l.id})">EMI അടച്ചു</button></div><div class="row"><button class="secondary small" onclick="editLoan(${l.id})">Edit details</button><span class="small muted">Due: ${l.day}th</span></div></div>`}
+function renderTransactions(){if(!$('txlist'))return;let f=$('filterType').value,q=$('searchTx').value.toLowerCase();let arr=[...data.tx].filter(x=>(f==='all'||x.type===f)&&(x.title+' '+x.person+' '+x.category).toLowerCase().includes(q)).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));$('txlist').innerHTML=arr.map(txHTML).join('')||empty()}
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo(0,0);render()}
 function modal(title,body,savefn){$('modalTitle').textContent=title;$('modalBody').innerHTML=body;$('modalSave').onclick=savefn;$('modal').classList.add('show')}
 function closeModal(){$('modal').classList.remove('show')}
@@ -180,11 +300,39 @@ function openTransaction(type='expense',old=null){let x=old||{};modal(old?'Edit 
 <label>വിവരണം / Name</label><input id="f_title" placeholder="ഉദാ: പച്ചക്കറി" value="${esc(x.title||'')}">
 <div class="formgrid"><div><label>തുക / Amount (₹)</label><input id="f_amount" type="number" min="0" step=".01" value="${x.amount||''}"></div><div><label>തീയതി / Date</label><input id="f_date" type="date" value="${x.date||new Date().toISOString().slice(0,10)}"></div></div>
 <div class="formgrid"><div><label>ആരാണ്?</label><select id="f_person"><option>അച്ഛൻ</option><option ${x.person==='അമ്മ'?'selected':''}>അമ്മ</option><option ${x.person==='കുടുംബം'?'selected':''}>കുടുംബം</option></select></div><div><label>Category</label><input id="f_cat" value="${esc(x.category||'Other')}" placeholder="Groceries"></div></div>`,()=>{let v={id:x.id||Date.now(),type:$('f_type').value,title:$('f_title').value.trim(),amount:+$('f_amount').value,date:$('f_date').value,person:$('f_person').value,category:$('f_cat').value};if(!v.title||v.amount<=0||!v.date)return alert('പേര്, തുക, തീയതി എന്നിവ നൽകുക');if(old)data.tx=data.tx.map(a=>a.id===old.id?v:a);else data.tx.push(v);save();closeModal()})}
-function editTx(id){let x=data.tx.find(a=>a.id===id);openTransaction(x.type,x)}
+function editTx(id){let x=data.tx.find(a=>a.id===id);if(x)openTransaction(x.type,x)}
 function openBill(old=null){let b=old||{};modal(old?'Edit bill':'പുതിയ Bill / List',`
 <label>പേര് / Name</label><input id="b_name" placeholder="ഉദാ: Electricity Bill" value="${esc(b.name||'')}">
 <div class="formgrid"><div><label>തുക (₹)</label><input id="b_amount" type="number" min="0" value="${b.amount||''}"></div><div><label>Due day (1–31)</label><input id="b_day" type="number" min="1" max="31" value="${b.day||''}"></div></div>
 <label>എത്ര തവണ?</label><select id="b_freq"><option value="monthly" ${b.frequency==='monthly'?'selected':''}>Monthly</option><option value="weekly" ${b.frequency==='weekly'?'selected':''}>Weekly</option><option value="daily" ${b.frequency==='daily'?'selected':''}>Daily / As needed</option></select>
-<label>Amount type</label><select id="b_fixed"><option value="true" ${b.fixed?'selected':''}>Fixed amount</option><option value="false" ${!b.fixed?'selected':''}>Flexible amount</option></select>`,()=>{let v={id:b.id||Date.now(),name:$('b_name').value.trim(),amount:+$('b_amount').value\vert{}\vert{}0,day:+$('b_day').value||0,frequency:$('b_freq').value,fixed:$('b_fixed').value==='true',paid:old?!!b.paid:false};if(!v.name)return alert('പേര് നൽകുക');if(old)data.bills=data.bills.map(a=>a.id===old.id?v:a);else data.bills.push(v);save();closeModal()})}
-function editBill(id){openBill(data.bills.find(a=>a.id===id))}
-function deleteBill(id){let b=data.bills.find(a=>a.id===id);if
+<label>Amount type</label><select id="b_fixed"><option value="true" ${b.fixed?'selected':''}>Fixed amount</option><option value="false" ${!b.fixed?'selected':''}>Flexible amount</option></select>`,()=>{let v={id:b.id||Date.now(),name:$('b_name').value.trim(),amount:+$('b_amount').value||0,day:+$('b_day').value||0,frequency:$('b_freq').value,fixed:$('b_fixed').value==='true',paid:old?!!b.paid:false};if(!v.name)return alert('പേര് നൽകുക');if(old)data.bills=data.bills.map(a=>a.id===old.id?v:a);else data.bills.push(v);save();closeModal()})}
+function editBill(id){let b=data.bills.find(a=>a.id===id);if(b)openBill(b)}
+function deleteBill(id){let b=data.bills.find(a=>a.id===id);if(!b)return;if(confirm(`"${b.name}" ലിസ്റ്റ് Delete ചെയ്യണോ? പഴയ ചെലവ് ഇടപാടുകൾ Delete ആകില്ല.`)){data.bills=data.bills.filter(a=>a.id!==id);save()}}
+function payBill(id){let b=data.bills.find(a=>a.id===id);if(!b)return;if(b.paid){b.paid=false;save();return}let amt=b.amount;if(!b.fixed||amt<=0){let a=prompt(`"${b.name}" — എത്ര രൂപ ചെലവായി?`,amt>0?amt:'');if(a===null||+a<=0)return;amt=+a;if(!b.fixed)b.amount=amt}b.paid=true;data.tx.push({id:Date.now(),type:'expense',title:b.name,amount:amt,date:new Date().toISOString().slice(0,10),person:'കുടുംബം',category:'Bill'});save()}
+function openLoan(old=null){let l=old||{};modal(old?'Edit Loan':'പുതിയ Loan',`
+<label>Loan Name</label><input id="l_name" value="${esc(l.name||'')}" placeholder="Loan 1">
+<div class="formgrid"><div><label>ആകെ ലോൺ (₹)</label><input id="l_principal" type="number" value="${l.principal||''}"></div><div><label>ഇതുവരെ അടച്ചത് (₹)</label><input id="l_paid" type="number" value="${l.paid||0}"></div></div>
+<div class="formgrid"><div><label>Monthly EMI (₹)</label><input id="l_emi" type="number" value="${l.emi||''}"></div><div><label>Due day</label><input id="l_day" type="number" min="1" max="31" value="${l.day||''}"></div></div>
+<label>നിലവിലെ യഥാർത്ഥ ബാക്കി (₹)</label><input id="l_balance" type="number" value="${l.balance??Math.max(0,(l.principal||0)-(l.paid||0))}">`,()=>{let p=+$('l_principal').value,paid=+$('l_paid').value,balance=+$('l_balance').value;let v={id:l.id||Date.now(),name:$('l_name').value.trim(),principal:p,paid,emi:+$('l_emi').value,day:+$('l_day').value,balance};if(!v.name||p<=0)return alert('Loan name and total amount required');if(old)data.loans=data.loans.map(a=>a.id===old.id?v:a);else data.loans.push(v);save();closeModal()})}
+function editLoan(id){let l=data.loans.find(a=>a.id===id);if(l)openLoan(l)}
+function payLoan(id){let l=data.loans.find(a=>a.id===id);if(!l)return;let a=prompt(`അടച്ച EMI തുക നൽകുക (₹). ${l.name} — EMI ${l.emi}`,l.emi||'');if(a===null||+a<=0)return;let amt=+a;l.paid+=amt;l.balance=Math.max(0,l.balance-amt);data.tx.push({id:Date.now(),type:'expense',title:l.name+' EMI',amount:amt,date:new Date().toISOString().slice(0,10),person:'കുടുംബം',category:'Loan'});save()}
+function openSettings(){showPage('settings')}
+function setTheme(v){theme=v;localStorage.setItem('ht_theme',v);document.documentElement.dataset.theme=v}
+function setLang(v){lang=v;localStorage.setItem('ht_lang',v);document.documentElement.lang=v;applyLanguage();render()}
+const dict={en:{remaining:'Remaining this month',income:'Income',expenses:'Expenses',addExpense:'Add expense',addIncome:'Add income',monthlyBills:'Bills & lists',viewAll:'View all',loans:'Loans',recent:'Recent transactions',transactions:'Transactions',add:'Add',bills:'Bills',settings:'Settings',home:'Home',language:'Language',theme:'Theme'},ml:{remaining:'ഈ മാസത്തെ ബാക്കി തുക',income:'വരുമാനം',expenses:'ചെലവ്',addExpense:'ചെലവ് ചേർക്കുക',addIncome:'വരുമാനം ചേർക്കുക',monthlyBills:'ബില്ലുകളും ലിസ്റ്റുകളും',viewAll:'എല്ലാം കാണുക',loans:'ലോണുകൾ',recent:'അവസാന ഇടപാടുകൾ',transactions:'ഇടപാടുകൾ',add:'ചേർക്കുക',bills:'ബില്ലുകൾ',settings:'ക്രമീകരണങ്ങൾ',home:'ഹോം',language:'ഭാഷ / Language',theme:'തീം'}};
+function applyLanguage(){document.querySelectorAll('[data-i18n]').forEach(el=>{let k=el.dataset.i18n;if(dict[lang]&&dict[lang][k])el.textContent=dict[lang][k]});if($('lang'))$('lang').value=lang}
+function setPin(){let p=prompt('Set a 4-digit PIN (leave blank to clear):');if(p===null)return;if(p===''){localStorage.removeItem('ht_pin');alert('PIN removed');return}if(/^\d{4}$/.test(p)){localStorage.setItem('ht_pin',p);alert('4-digit PIN saved on this device.')}else alert('4 digit PIN നൽകുക')}
+function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='home-talk-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.tx||!d.bills||!d.loans)throw 0;data=d;save();alert('Backup restored')}catch{alert('Invalid backup file')}};r.readAsText(f)}
+function clearAllData(){if(confirm('Demo / എല്ലാ വിവരങ്ങളും ഒഴിവാക്കി ₹0 ആക്കണോ?')){data={tx:[],bills:[],loans:[]};save()}}
+function resetDemo(){if(confirm('Reset all sample data?')){data=JSON.parse(JSON.stringify(sample));save()}}
+
+document.documentElement.dataset.theme=theme;
+document.documentElement.lang=lang;
+if($('theme'))$('theme').value=theme;
+applyLanguage();
+render();
+setTimeout(()=>pullCloud(false), 100);
+</script>
+</body>
+</html>
