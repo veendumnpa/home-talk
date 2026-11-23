@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#f5f7f5">
 <title>Home Talk — Family Finance</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#f4f7f5;--surface:#fff;--surface2:#edf2ef;--text:#17231e;--muted:#718078;--line:#e2e9e4;--green:#167a58;--green2:#e1f3e9;--red:#c64e4e;--amber:#a66a12;--shadow:0 8px 28px rgba(24,54,39,.07)}
 [data-theme="dark"]{--bg:#101815;--surface:#19231e;--surface2:#223029;--text:#eef6f0;--muted:#a0b1a6;--line:#2b3a31;--green:#76d5a7;--green2:#203d30;--red:#ff8585;--amber:#efc16d;--shadow:0 8px 28px rgba(0,0,0,.2)}
@@ -19,12 +20,13 @@ h2{font-size:19px;margin:20px 0 10px}.muted{color:var(--muted)}.small{font-size:
 .itemicon{width:38px;height:38px;border-radius:12px;background:var(--surface2);display:grid;place-items:center;font-size:19px;flex-shrink:0}.itemmain{display:flex;align-items:center;gap:10px;min-width:0}.itemmain strong{display:block}.itemmain small{color:var(--muted)}.money{font-weight:750;white-space:nowrap}.positive{color:var(--green)}.negative{color:var(--red)}
 input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--text);outline:none}label{display:block;font-size:12px;color:var(--muted);margin:12px 0 6px}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.modalback{position:fixed;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center;z-index:10;padding:12px}.modalback.show{display:flex}.modal{width:min(520px,100%);background:var(--surface);border-radius:22px;padding:18px;max-height:88dvh;overflow:auto}.modal h3{margin:0 0 8px}.actions{display:flex;gap:8px;margin-top:16px}.actions>*{flex:1}.progress{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;margin:10px 0}.progress i{display:block;height:100%;background:var(--green);border-radius:99px}.empty{text-align:center;color:var(--muted);padding:24px 8px}.settingsrow{padding:13px 0;border-bottom:1px solid var(--line)}.settingsrow:last-child{border:0}
 .notice{padding:11px 12px;background:var(--surface2);border-radius:12px;color:var(--muted);font-size:12px;margin:12px 0}
+.syncbadge{font-size:11px;padding:4px 8px;border-radius:99px;background:var(--surface2);color:var(--muted)}
 @media(min-width:520px){body{padding:16px 0}.app{border:1px solid var(--line);border-radius:24px;min-height:calc(100dvh - 32px);overflow:hidden}.tabs{bottom:16px;border-radius:0 0 24px 24px}}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><div class="logo">🏡</div><div><h1 id="appname">Home Talk</h1><p id="subtitle">Family Finance Manager</p></div></div><button class="iconbtn" onclick="openSettings()" aria-label="Settings">⚙️</button></header>
+<header><div class="brand"><div class="logo">🏡</div><div><h1 id="appname">Home Talk</h1><p id="subtitle">Family Finance Manager</p></div></div><div style="display:flex;align-items:center;gap:8px"><span class="syncbadge" id="syncStatus">Syncing...</span><button class="iconbtn" onclick="openSettings()" aria-label="Settings">⚙️</button></div></header>
 
 <main>
 <section class="page active" id="home">
@@ -44,15 +46,16 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 <section class="page" id="settings"><h2 data-i18n="settings">ക്രമീകരണങ്ങൾ</h2><div class="card">
 <div class="settingsrow"><label data-i18n="language">ഭാഷ / Language</label><select id="lang" onchange="setLang(this.value)"><option value="ml">മലയാളം</option><option value="en">English</option></select></div>
 <div class="settingsrow"><label data-i18n="theme">Theme</label><select id="theme" onchange="setTheme(this.value)"><option value="light">Light</option><option value="dark">Dark</option></select></div>
-<div class="settingsrow"><label>PIN (Sample only)</label><button class="secondary" onclick="setPin()">PIN മാറ്റുക / Set PIN</button></div>
+<div class="settingsrow"><label>PIN Lock (4 digits)</label><button class="secondary" onclick="setPin()">PIN മാറ്റുക / Set PIN</button></div>
 <div class="settingsrow">
   <div class="row"><strong>ബിൽ ലിസ്റ്റുകൾ നിയന്ത്രിക്കുക</strong><button class="primary small" onclick="openBill()">＋ Add list</button></div>
   <p class="small muted">പേര്, തുക, due date എന്നിവ Edit ചെയ്യാനും ആവശ്യമില്ലാത്ത ലിസ്റ്റുകൾ Delete ചെയ്യാനും ഇവിടെ മാത്രം കഴിയും.</p>
   <div id="settingsBillList"></div>
 </div>
+<div class="settingsrow"><label>Cloud Sync</label><button class="secondary" onclick="pullCloud(true)">Refresh from Cloud</button></div>
 <div class="settingsrow"><label>Data</label><div class="row"><button class="secondary" onclick="exportData()">Backup JSON</button><button class="secondary" onclick="document.getElementById('restoreFile').click()">Restore</button><input hidden type="file" id="restoreFile" accept="application/json" onchange="restoreData(event)"></div></div>
 <div class="settingsrow"><button class="danger" onclick="resetDemo()">Demo data reset</button></div>
-</div><div class="notice">ഈ HTML sample-ൽ ഡാറ്റ ഈ browser-ൽ മാത്രം LocalStorage-ൽ സേവ് ചെയ്യും. ഫോണുകൾക്കിടയിൽ Sync ചെയ്യാൻ പിന്നീട് Supabase + secure login ബന്ധിപ്പിക്കണം. ഇത് ഇപ്പോൾ live cloud sync അല്ല.</div></section>
+</div><div class="notice">Supabase Cloud Sync സജീവമാണ് — നിങ്ങളുടെ ഫോണിലും അമ്മയുടെ ഫോണിലും ഒരേ വിവരങ്ങൾ sync ആകും.</div></section>
 </main>
 </div>
 <nav class="tabs">
@@ -66,6 +69,12 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 <div class="modalback" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal"><h3 id="modalTitle">ചേർക്കുക</h3><div id="modalBody"></div><div class="actions"><button class="secondary" onclick="closeModal()">Cancel</button><button class="primary" id="modalSave">Save</button></div></div></div>
 
 <script>
+const SUPABASE_URL = 'https://mrzelisawndfwpefrnls.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_QiopdhL2HJMNEPc0vuXBpA_M20I3Z0m';
+const sb = (window.supabase && SUPABASE_KEY && !SUPABASE_KEY.includes('PASTE_YOUR'))
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+  : null;
+
 const $=id=>document.getElementById(id), money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{maximumFractionDigits:2});
 const monthKey=()=>new Date().toISOString().slice(0,7);
 const sample={
@@ -88,7 +97,35 @@ const sample={
 };
 let data=JSON.parse(localStorage.getItem('ht_data')||'null')||sample;
 let lang=localStorage.getItem('ht_lang')||'ml',theme=localStorage.getItem('ht_theme')||'light';
-function save(){localStorage.setItem('ht_data',JSON.stringify(data));render()}
+
+function setSyncStatus(msg){if($('syncStatus'))$('syncStatus').textContent=msg}
+
+async function pushCloud(){
+ if(!sb){setSyncStatus('Local only');return}
+ setSyncStatus('Saving...');
+ const {error}=await sb.from('home_talk_state').upsert({id:'main_family',payload:data,updated_at:new Date().toISOString()});
+ setSyncStatus(error?'Sync error':'Synced ✓');
+}
+
+async function pullCloud(manual=false){
+ if(!sb){setSyncStatus('Local only');return}
+ setSyncStatus('Syncing...');
+ const {data:row,error}=await sb.from('home_talk_state').select('payload').eq('id','main_family').single();
+ if(error){setSyncStatus('Offline');return}
+ const p=row?.payload;
+ const isEmpty=!p||((!p.tx||p.tx.length===0)&&(!p.bills||p.bills.length===0)&&(!p.loans||p.loans.length===0));
+ if(isEmpty){
+  await pushCloud();
+ }else{
+  data={tx:p.tx||[],bills:p.bills||[],loans:p.loans||[]};
+  localStorage.setItem('ht_data',JSON.stringify(data));
+  render();
+  setSyncStatus('Synced ✓');
+  if(manual)alert('Cloud data refreshed!');
+ }
+}
+
+function save(){localStorage.setItem('ht_data',JSON.stringify(data));render();pushCloud()}
 function fmtDate(d){return new Date(d+'T00:00:00').toLocaleDateString(lang==='ml'?'ml-IN':'en-IN',{day:'numeric',month:'short'})}
 function monthTx(){return data.tx.filter(t=>t.date.startsWith(monthKey()))}
 function totals(){let t=monthTx(),inc=t.filter(x=>x.type==='income').reduce((a,x)=>a+ +x.amount,0),exp=t.filter(x=>x.type==='expense').reduce((a,x)=>a+ +x.amount,0);return{inc,exp,net:inc-exp}}
@@ -131,11 +168,16 @@ function setTheme(v){theme=v;localStorage.setItem('ht_theme',v);document.documen
 function setLang(v){lang=v;localStorage.setItem('ht_lang',v);document.documentElement.lang=v;applyLanguage();render()}
 const dict={en:{remaining:'Remaining this month',income:'Income',expenses:'Expenses',addExpense:'Add expense',addIncome:'Add income',monthlyBills:'Bills & lists',viewAll:'View all',loans:'Loans',recent:'Recent transactions',transactions:'Transactions',add:'Add',bills:'Bills',settings:'Settings',home:'Home',language:'Language',theme:'Theme'},ml:{remaining:'ഈ മാസത്തെ ബാക്കി തുക',income:'വരുമാനം',expenses:'ചെലവ്',addExpense:'ചെലവ് ചേർക്കുക',addIncome:'വരുമാനം ചേർക്കുക',monthlyBills:'ബില്ലുകളും ലിസ്റ്റുകളും',viewAll:'എല്ലാം കാണുക',loans:'ലോണുകൾ',recent:'അവസാന ഇടപാടുകൾ',transactions:'ഇടപാടുകൾ',add:'ചേർക്കുക',bills:'ബില്ലുകൾ',settings:'ക്രമീകരണങ്ങൾ',home:'ഹോം',language:'ഭാഷ / Language',theme:'തീം'}};
 function applyLanguage(){document.querySelectorAll('[data-i18n]').forEach(el=>{let k=el.dataset.i18n;if(dict[lang][k])el.textContent=dict[lang][k]});$('lang').value=lang}
-function setPin(){let p=prompt('Set a simple demo PIN (4 digits):');if(p&&/^\d{4}$/.test(p)){localStorage.setItem('ht_pin_demo',p);alert('Demo PIN saved in this browser. This is not production-grade security.')}else if(p)alert('4 digit PIN നൽകുക')}
+function setPin(){let p=prompt('Set a 4-digit PIN (leave blank to clear):');if(p===null)return;if(p===''){localStorage.removeItem('ht_pin');alert('PIN removed');return}if(/^\d{4}$/.test(p)){localStorage.setItem('ht_pin',p);alert('4-digit PIN saved on this device.')}else alert('4 digit PIN നൽകുക')}
+function checkPin(){let p=localStorage.getItem('ht_pin');if(!p)return;let entered=prompt('Enter 4-digit Home Talk PIN:');if(entered!==p){document.body.innerHTML='<div style="padding:40px;text-align:center;font-family:sans-serif"><h3>🔒 Locked</h3><p>Wrong PIN. Refresh to try again.</p></div>'}}
 function exportData(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='home-talk-backup.json';a.click();URL.revokeObjectURL(a.href)}
 function restoreData(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.tx||!d.bills||!d.loans)throw 0;data=d;save();alert('Backup restored')}catch{alert('Invalid backup file')}};r.readAsText(f)}
 function resetDemo(){if(confirm('Reset all sample data?')){data=JSON.parse(JSON.stringify(sample));save()}}
+
+checkPin();
 document.documentElement.dataset.theme=theme;document.documentElement.lang=lang;$('theme').value=theme;applyLanguage();render();
+pullCloud();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)pullCloud()});
 </script>
 </body>
 </html>
